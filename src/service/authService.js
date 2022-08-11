@@ -52,7 +52,7 @@ async function pusher() {
     token;
   const data = await getInfo();
   const params = {
-    touser: "os1X15kygleLTzD49K-6CzvmMrL0", // 用户openid 3
+    touser: ["os1X15kygleLTzD49K-6CzvmMrL0", "os1X15ihIP0y8yYR7M3zUGfSkOGQ"], // 用户openid 3
     template_id: "wMFEGQ9fY3ZU6YJQEywtL_IbMJVnF20HafhlA9VhBvg", // 模板id 4
     topcolor: "#FF0000",
     data,
