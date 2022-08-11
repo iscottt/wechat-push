@@ -1,0 +1,32 @@
+[
+  {
+    "menu_name": "仪表盘",
+    "menu_url": "/dashboard",
+    "menu_icon": "carbon:dashboard",
+    "menu_sort": 1,
+    "menu_component": "basic",
+    "id": 1,
+    "parent_id": 0,
+    "status": 1
+  },
+  {
+    "menu_name": "分析页",
+    "menu_url": "/dashboard/analysis",
+    "menu_icon": "icon-park-outline:analysis",
+    "menu_sort": 1,
+    "menu_component": "self",
+    "id": 11,
+    "parent_id": 1,
+    "status": 1
+  },
+  {
+    "menu_name": "工作台",
+    "menu_url": "/dashboard/workbench",
+    "menu_icon": "icon-park-outline:workbench",
+    "menu_sort": 2,
+    "menu_component": "self",
+    "id": 12,
+    "parent_id": 1,
+    "status": 1
+  }
+]
