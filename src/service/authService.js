@@ -51,13 +51,22 @@ async function pusher() {
     "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" +
     token;
   const data = await getInfo();
+  // bb
   const params = {
-    touser: ["os1X15kygleLTzD49K-6CzvmMrL0", "os1X15ihIP0y8yYR7M3zUGfSkOGQ"], // 用户openid 3
-    template_id: "wMFEGQ9fY3ZU6YJQEywtL_IbMJVnF20HafhlA9VhBvg", // 模板id 4
+    touser: "os1X15ihIP0y8yYR7M3zUGfSkOGQ",
+    template_id: "wMFEGQ9fY3ZU6YJQEywtL_IbMJVnF20HafhlA9VhBvg",
     topcolor: "#FF0000",
     data,
   };
-  const res = await axiosPost(url, params);
+  // pp
+  const params2 = {
+    touser: "os1X15kygleLTzD49K-6CzvmMrL0",
+    template_id: "wMFEGQ9fY3ZU6YJQEywtL_IbMJVnF20HafhlA9VhBvg",
+    topcolor: "#FF0000",
+    data,
+  };
+  await axiosPost(url, params);
+  await axiosPost(url, params2);
 }
 
 /**
