@@ -34,8 +34,8 @@ async function authVerityApi(event, req, res) {
 async function getToken() {
   const params = {
     grant_type: "client_credential",
-    appid: "wxeefb4bc1e975db3b", // 你的appid  1
-    secret: "a2edcbee408af7079098d659096e16b9", // 你的secret 2
+    appid: "wxeefb4bc1e975db3b",
+    secret: "a2edcbee408af7079098d659096e16b9",
   };
   let res = await axiosGet("https://api.weixin.qq.com/cgi-bin/token", params);
   return res.data.access_token;
@@ -144,8 +144,9 @@ function getDateByDays() {
   const endDate = new Date();
   let d1 = Date.parse(startDate);
   let d2 = Date.parse(endDate);
+  const ONE_DAY = 1000 * 60 * 60 * 24;
   // 时间戳相减 / 天数
-  let day = parseInt((d2 - d1) / (1000 * 60 * 60 * 24));
+  let day = parseInt((d2 - d1) / ONE_DAY);
   return day;
 }
 
