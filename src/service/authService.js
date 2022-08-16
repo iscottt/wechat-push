@@ -83,13 +83,13 @@ async function test() {
  */
 async function getInfo() {
   const wetherAk = "fmktg3K1ZKY8u2ONOawAOF2qwhab1KKS";
-  const result = await axiosGet(`https://api.map.baidu.com/weather/v1/`, {
+  const { data } = await axiosGet(`https://api.map.baidu.com/weather/v1/`, {
     district_id: "330100",
     data_type: "fc",
     ak: wetherAk,
   });
   // 获取今天的信息
-  const today = result.data.result.forecasts[0];
+  const today = data.result.forecasts[0];
   const todayStr = `${today.date} ${today.week}`;
   // 今日天气
   const weatherStr = today.text_day;
@@ -103,7 +103,7 @@ async function getInfo() {
   const birthday = getDistanceSpecifiedTime("2022-12-22");
   // 早安心语（彩虹屁）
   const text = await getTips();
-  const templateData = {
+  return {
     today: {
       value: todayStr,
       color: "#00BFFF",
@@ -137,7 +137,6 @@ async function getInfo() {
       color: "#FF69B4",
     },
   };
-  return templateData;
 }
 
 /**
@@ -199,15 +198,8 @@ function getDistanceSpecifiedTime(dateTime) {
   const EndTime = new Date(dateTime);
   // 当前系统时间
   const NowTime = new Date();
-  const t = EndTime.getTime() - NowTime.getTime();
-  const d = Math.floor(t / 1000 / 60 / 60 / 24);
-  const h = Math.floor((t / 1000 / 60 / 60) % 24);
-  if (h > 0 && d > 0) {
-    return d + 1;
-  }
-  if (h > 0 && d <= 0) {
-    return 0;
-  }
+  // 两个时间的相差天数
+  return Math.ceil(Math.abs(NowTime.getTime() - EndTime.getTime()) / 86400000);
 }
 
 module.exports = {
