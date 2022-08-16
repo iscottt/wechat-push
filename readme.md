@@ -79,4 +79,4 @@ pm2 start ./src/main.js -n node-express
 
 
 ### 示例
-<img src='./public/images/eg.jpg'/>
+<img src='./public/images/eg.jpg' width="350"/>
