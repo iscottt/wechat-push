@@ -79,7 +79,6 @@ async function test() {
 
 /**
  * 获取模板展示信息
- * @returns {Promise<{birthday: {color: string, value: (*|number)}, weatherLow: {color: string, value: number}, today: {color: string, value: string}, weatherStr: {color: string, value: *}, text: {color: string, value: (string|DocumentFragment)}, linaAi: {color: string, value: number}, tips: {color: string, value: string}, weatherHigh: {color: string, value: number}}>}
  */
 async function getInfo() {
   const wetherAk = "fmktg3K1ZKY8u2ONOawAOF2qwhab1KKS";
@@ -141,12 +140,13 @@ async function getInfo() {
 
 /**
  * 获取纪念日天数
+ * @returns {number}
  */
 function getDateByDays() {
   const startDate = new Date("2021-03-16");
   const endDate = new Date();
-  let d1 = Date.parse(startDate);
-  let d2 = Date.parse(endDate);
+  const d1 = Date.parse(startDate);
+  const d2 = Date.parse(endDate);
   const ONE_DAY = 1000 * 60 * 60 * 24;
   // 时间戳相减 / 天数
   let day = parseInt((d2 - d1) / ONE_DAY);
