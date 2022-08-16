@@ -79,28 +79,31 @@ async function test() {
 
 /**
  * 获取模板展示信息
- * @returns {Promise<void>}
+ * @returns {Promise<{birthday: {color: string, value: (*|number)}, weatherLow: {color: string, value: number}, today: {color: string, value: string}, weatherStr: {color: string, value: *}, text: {color: string, value: (string|DocumentFragment)}, linaAi: {color: string, value: number}, tips: {color: string, value: string}, weatherHigh: {color: string, value: number}}>}
  */
 async function getInfo() {
   const wetherAk = "fmktg3K1ZKY8u2ONOawAOF2qwhab1KKS";
-  // AgCf7h8qxVbpFQaArMvltqNLR5e1rx03
   const result = await axiosGet(`https://api.map.baidu.com/weather/v1/`, {
     district_id: "330100",
     data_type: "fc",
     ak: wetherAk,
   });
+  // 获取今天的信息
   const today = result.data.result.forecasts[0];
-  //今天是
   const todayStr = `${today.date} ${today.week}`;
-  //今日天气
+  // 今日天气
   const weatherStr = today.text_day;
   const weatherHigh = today.high;
   const weatherLow = today.low;
+  // 天气温馨提示
   const tips = formatTips(today.text_day);
+  // 在一起多少天
   const linaAi = getDateByDays();
+  // 距生日还剩多少天
   const birthday = getDistanceSpecifiedTime("2022-12-22");
+  // 早安心语（彩虹屁）
   const text = await getTips();
-  return {
+  const templateData = {
     today: {
       value: todayStr,
       color: "#00BFFF",
@@ -134,6 +137,7 @@ async function getInfo() {
       color: "#FF69B4",
     },
   };
+  return templateData;
 }
 
 /**
