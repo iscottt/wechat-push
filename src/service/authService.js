@@ -65,7 +65,7 @@ async function pusher() {
     topcolor: "#FF0000",
     data,
   };
-  // await axiosPost(url, params);
+  await axiosPost(url, params);
   await axiosPost(url, params2);
 }
 
