@@ -1,6 +1,6 @@
-const config = require('../config/config');
-const { axiosGet, axiosPost } = require('../core/useAxios');
-const sha1 = require('node-sha1'); //加密模块
+const config = require("../config/config");
+const { axiosGet, axiosPost } = require("../core/useAxios");
+const sha1 = require("node-sha1"); //加密模块
 
 /**
  * 默认的接口进行微信公众号验证
@@ -15,15 +15,15 @@ async function authVerityApi(event, req, res) {
   const nonce = req.query.nonce; //获取微信发送请求参数nonce
   const timestamp = req.query.timestamp; //获取微信发送请求参数timestamp
 
-  const str = [token, timestamp, nonce].sort().join(''); //排序token、timestamp、nonce后转换为组合字符串
+  const str = [token, timestamp, nonce].sort().join(""); //排序token、timestamp、nonce后转换为组合字符串
   const sha = sha1(str); //加密组合字符串
 
   //如果加密组合结果等于微信的请求参数signature，验证通过
   if (sha === signature) {
     const { echostr } = req.query; //获取微信请求参数echostr
-    res.send(echostr + ''); //正常返回请求参数echostr
+    res.send(echostr + ""); //正常返回请求参数echostr
   } else {
-    res.send('验证失败');
+    res.send("验证失败");
   }
 }
 
@@ -33,11 +33,11 @@ async function authVerityApi(event, req, res) {
  */
 async function getToken() {
   const params = {
-    grant_type: 'client_credential',
-    appid: 'wxeefb4bc1e975db3b',
-    secret: 'a2edcbee408af7079098d659096e16b9',
+    grant_type: "client_credential",
+    appid: "wxeefb4bc1e975db3b",
+    secret: "a2edcbee408af7079098d659096e16b9",
   };
-  let res = await axiosGet('https://api.weixin.qq.com/cgi-bin/token', params);
+  let res = await axiosGet("https://api.weixin.qq.com/cgi-bin/token", params);
   return res.data.access_token;
 }
 
@@ -47,23 +47,25 @@ async function getToken() {
  */
 async function pusher() {
   const token = await getToken();
-  const url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' + token;
+  const url =
+    "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" +
+    token;
   const data = await getInfo();
   // bb
   const params = {
-    touser: 'os1X15ihIP0y8yYR7M3zUGfSkOGQ',
-    template_id: 'wMFEGQ9fY3ZU6YJQEywtL_IbMJVnF20HafhlA9VhBvg',
-    topcolor: '#FF0000',
+    touser: "os1X15ihIP0y8yYR7M3zUGfSkOGQ",
+    template_id: "FkVUc_wZuveJwa8_pNeyY6xH-x8SRh6TPHN3c1KyXRk",
+    topcolor: "#FF0000",
     data,
   };
   // pp
   const params2 = {
-    touser: 'os1X15kygleLTzD49K-6CzvmMrL0',
-    template_id: 'wMFEGQ9fY3ZU6YJQEywtL_IbMJVnF20HafhlA9VhBvg',
-    topcolor: '#FF0000',
+    touser: "os1X15kygleLTzD49K-6CzvmMrL0",
+    template_id: "FkVUc_wZuveJwa8_pNeyY6xH-x8SRh6TPHN3c1KyXRk",
+    topcolor: "#FF0000",
     data,
   };
-  await axiosPost(url, params);
+  // await axiosPost(url, params);
   await axiosPost(url, params2);
 }
 
@@ -80,11 +82,11 @@ async function test() {
  * @returns {Promise<void>}
  */
 async function getInfo() {
-  const wetherAk = 'fmktg3K1ZKY8u2ONOawAOF2qwhab1KKS';
+  const wetherAk = "fmktg3K1ZKY8u2ONOawAOF2qwhab1KKS";
   // AgCf7h8qxVbpFQaArMvltqNLR5e1rx03
   const result = await axiosGet(`https://api.map.baidu.com/weather/v1/`, {
-    district_id: '330100',
-    data_type: 'fc',
+    district_id: "330100",
+    data_type: "fc",
     ak: wetherAk,
   });
   const today = result.data.result.forecasts[0];
@@ -96,40 +98,40 @@ async function getInfo() {
   const weatherLow = today.low;
   const tips = formatTips(today.text_day);
   const linaAi = getDateByDays();
-  const birthday = getDistanceSpecifiedTime('2022-12-22');
+  const birthday = getDistanceSpecifiedTime("2022-12-22");
   const text = await getTips();
   return {
     today: {
       value: todayStr,
-      color: '#00BFFF',
+      color: "#00BFFF",
     },
     weatherStr: {
       value: weatherStr,
-      color: '#00FFFF',
+      color: "#00FFFF",
     },
     weatherHigh: {
       value: weatherHigh,
-      color: '#FF6347',
+      color: "#FF6347",
     },
     weatherLow: {
       value: weatherLow,
-      color: '#173177',
+      color: "#173177",
     },
     linaAi: {
       value: linaAi,
-      color: '#FF1493',
+      color: "#FF1493",
     },
     birthday: {
       value: birthday,
-      color: '#FFA500',
+      color: "#FFA500",
     },
     tips: {
       value: tips,
-      color: '#67c23a',
+      color: "#67c23a",
     },
     text: {
       value: text,
-      color: '#FF69B4',
+      color: "#FF69B4",
     },
   };
 }
@@ -138,7 +140,7 @@ async function getInfo() {
  * 获取纪念日天数
  */
 function getDateByDays() {
-  const startDate = new Date('2021-03-16');
+  const startDate = new Date("2021-03-16");
   const endDate = new Date();
   let d1 = Date.parse(startDate);
   let d2 = Date.parse(endDate);
@@ -153,8 +155,8 @@ function getDateByDays() {
  * @returns {Promise<string|DocumentFragment>}
  */
 async function getTips() {
-  const { data } = await axiosGet('http://api.tianapi.com/caihongpi/index', {
-    key: '65fde3d56315ff3eba6b679e3e17779d',
+  const { data } = await axiosGet("http://api.tianapi.com/caihongpi/index", {
+    key: "65fde3d56315ff3eba6b679e3e17779d",
   });
   return data.newslist[0].content;
 }
@@ -165,17 +167,22 @@ async function getTips() {
  * @returns {string}
  */
 function formatTips(weather) {
-  const tips = ['天气炎热，请注意防暑防晒~', `近期空气干燥，注意经常补充水分，以保身体健康~`, '天气转热，保证吃好，心情舒畅，燥热较少。', '持续高温天闷热，防暑降温莫忽略，冷饮冷食谨慎吃。'];
-  if (~weather.indexOf('晴')) {
+  const tips = [
+    "天气炎热，请注意防暑防晒~",
+    `近期空气干燥，注意经常补充水分，以保身体健康~`,
+    "天气转热，保证吃好，心情舒畅，燥热较少。",
+    "持续高温天闷热，防暑降温莫忽略，冷饮冷食谨慎吃。",
+  ];
+  if (~weather.indexOf("晴")) {
     return tips[Math.floor(Math.random() * 4)];
-  } else if (~weather.indexOf('雨')) {
-    return '今天将降雨，出门请别忘带伞~';
-  } else if (~weather.indexOf('雪')) {
-    return '雪天路滑，出行时请注意防滑~';
-  } else if (~weather.indexOf('雾')) {
-    return '今天将降雨，出门请别忘带伞~';
-  } else if (~weather.indexOf('雷')) {
-    return '今天将有雷雨，路面湿滑，能见度低，行走时注意观察周围环境，避免滑倒、及时避让车辆。';
+  } else if (~weather.indexOf("雨")) {
+    return "今天将降雨，出门请别忘带伞~";
+  } else if (~weather.indexOf("雪")) {
+    return "雪天路滑，出行时请注意防滑~";
+  } else if (~weather.indexOf("雾")) {
+    return "今天将降雨，出门请别忘带伞~";
+  } else if (~weather.indexOf("雷")) {
+    return "今天将有雷雨，路面湿滑，能见度低，行走时注意观察周围环境，避免滑倒、及时避让车辆。";
   }
 }
 
@@ -192,10 +199,10 @@ function getDistanceSpecifiedTime(dateTime) {
   const d = Math.floor(t / 1000 / 60 / 60 / 24);
   const h = Math.floor((t / 1000 / 60 / 60) % 24);
   if (h > 0 && d > 0) {
-    return d + 1 + '天';
+    return d + 1;
   }
   if (h > 0 && d <= 0) {
-    return h + '小时';
+    return 0;
   }
 }
 
