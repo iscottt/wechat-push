@@ -33,12 +33,15 @@ async function authVerityApi(event, req, res) {
  */
 async function getToken() {
   const params = {
-    grant_type: "client_credential",
-    appid: "wxeefb4bc1e975db3b",
-    secret: "a2edcbee408af7079098d659096e16b9",
+    grant_type: config.grant_type,
+    appid: config.appid,
+    secret: config.secret,
   };
-  let res = await axiosGet("https://api.weixin.qq.com/cgi-bin/token", params);
-  return res.data.access_token;
+  let { data } = await axiosGet(
+    "https://api.weixin.qq.com/cgi-bin/token",
+    params
+  );
+  return data.access_token;
 }
 
 /**
@@ -53,15 +56,13 @@ async function pusher() {
   const data = await getInfo();
   // bb
   const params = {
-    touser: "os1X15ihIP0y8yYR7M3zUGfSkOGQ",
-    template_id: "FkVUc_wZuveJwa8_pNeyY6xH-x8SRh6TPHN3c1KyXRk",
+    ...config.user_bb,
     topcolor: "#FF0000",
     data,
   };
   // pp
   const params2 = {
-    touser: "os1X15kygleLTzD49K-6CzvmMrL0",
-    template_id: "FkVUc_wZuveJwa8_pNeyY6xH-x8SRh6TPHN3c1KyXRk",
+    ...config.user_pp,
     topcolor: "#FF0000",
     data,
   };
@@ -81,11 +82,11 @@ async function test() {
  * 获取模板展示信息
  */
 async function getInfo() {
-  const wetherAk = "fmktg3K1ZKY8u2ONOawAOF2qwhab1KKS";
+  const weatherAk = config.weatherAk;
   const { data } = await axiosGet(`https://api.map.baidu.com/weather/v1/`, {
     district_id: "330100",
     data_type: "fc",
-    ak: wetherAk,
+    ak: weatherAk,
   });
   // 获取今天的信息
   const today = data.result.forecasts[0];
@@ -99,7 +100,7 @@ async function getInfo() {
   // 在一起多少天
   const linaAi = getDateByDays();
   // 距生日还剩多少天
-  const birthday = getDistanceSpecifiedTime("2022-12-22");
+  const birthday = getDistanceSpecifiedTime(config.birthday);
   // 早安心语（彩虹屁）
   const text = await getTips();
   return {
@@ -143,7 +144,7 @@ async function getInfo() {
  * @returns {number}
  */
 function getDateByDays() {
-  const startDate = new Date("2021-03-16");
+  const startDate = new Date(config.anniversary);
   const endDate = new Date();
   const d1 = Date.parse(startDate);
   const d2 = Date.parse(endDate);
@@ -159,7 +160,7 @@ function getDateByDays() {
  */
 async function getTips() {
   const { data } = await axiosGet("http://api.tianapi.com/caihongpi/index", {
-    key: "65fde3d56315ff3eba6b679e3e17779d",
+    key: config.tipsKey,
   });
   return data.newslist[0].content;
 }
