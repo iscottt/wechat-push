@@ -4,7 +4,7 @@ const schedule = require("node-schedule");
 const { pusher } = require("./service/authService");
 
 // 启动任务
-const job = schedule.scheduleJob("0 35 7 * * *", async () => {
+const job = schedule.scheduleJob("0 0 8 * * *", async () => {
   console.log("========定时任务启动======", new Date());
   await pusher();
 });
