@@ -70,13 +70,31 @@ async function pusher() {
   await axiosPost(url, params2);
   await axiosPost(url, params);
 }
+// 喝水推送
+async function publishWater(){
+  const token = await getToken();
+  const url =
+      "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" +
+      token;
+  // 喝水助手
+  const params1 = {
+    ...config.water_pp,
+    topcolor: "#FF0000",
+  };
+  const params2 = {
+    ...config.water_bb,
+    topcolor: "#FF0000",
+  };
+  await axiosPost(url, params1);
+  await axiosPost(url, params2);
+}
 
 /**
  * 测试推送接口
  * @returns {Promise<void>}
  */
 async function test() {
-  return await pusher();
+  return await publishWater();
 }
 
 /**
@@ -151,8 +169,7 @@ function getDateByDays() {
   const d2 = Date.parse(endDate);
   const ONE_DAY = 1000 * 60 * 60 * 24;
   // 时间戳相减 / 天数
-  let day = parseInt((d2 - d1) / ONE_DAY);
-  return day;
+  return parseInt((d2 - d1) / ONE_DAY);
 }
 
 /**

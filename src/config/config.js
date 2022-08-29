@@ -21,6 +21,18 @@ module.exports = {
     touser: "os1X15kygleLTzD49K-6CzvmMrL0",
     template_id: "FkVUc_wZuveJwa8_pNeyY6xH-x8SRh6TPHN3c1KyXRk",
   },
+  // 喝水提醒小助手
+  // 推送用户配置
+  water_bb: {
+    // openID
+    touser: "os1X15ihIP0y8yYR7M3zUGfSkOGQ",
+    // 模板ID
+    template_id: "7ODasrmKKqhNdq2aHBz4ve1NFWFZ5uMW7XKl76FVfZY",
+  },
+  water_pp: {
+    touser: "os1X15kygleLTzD49K-6CzvmMrL0",
+    template_id: "7ODasrmKKqhNdq2aHBz4ve1NFWFZ5uMW7XKl76FVfZY",
+  },
   // 百度天气AK
   weatherAk: "fmktg3K1ZKY8u2ONOawAOF2qwhab1KKS",
   // 彩虹屁KEY
