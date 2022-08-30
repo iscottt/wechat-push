@@ -71,11 +71,11 @@ async function pusher() {
   await axiosPost(url, params);
 }
 // 喝水推送
-async function publishWater(){
+async function publishWater() {
   const token = await getToken();
   const url =
-      "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" +
-      token;
+    "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" +
+    token;
   // 喝水助手
   const params1 = {
     ...config.water_pp,
@@ -88,13 +88,84 @@ async function publishWater(){
   await axiosPost(url, params1);
   await axiosPost(url, params2);
 }
-
+async function getCompanyToken() {
+  const result = await axiosGet(
+    "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwbfde2b408c6ce316&corpsecret=ngKWvobLtRyC1tRaSfJcc4VfV2uwl0Pon84C9R0bjfU"
+  );
+  return result.data.access_token;
+}
+async function companyPublishHello() {
+  const token = await getCompanyToken();
+  const data = await getInfo();
+  const params = {
+    touser: "@all",
+    msgtype: "textcard",
+    agentid: 1000002,
+    textcard: {
+      title: "早上好，宝宝~",
+      description:
+        '<div class="normal">👨🏻‍💻今天是：' +
+        data.today.value +
+        '</div><div class="normal">☀️今日天气：' +
+        data.weatherStr.value +
+        '</div><div class="normal">👆🏻最高气温：' +
+        data.weatherHigh.value +
+        '℃</div><div class="normal">👇🏻最低气温：' +
+        data.weatherLow.value +
+        '℃</div><div class="normal"></div><div class="normal">🥰今天是我们在一起的第' +
+        data.linaAi.value +
+        '天</div><div class="normal">🎂距离宝宝的生日还有' +
+        data.birthday.value +
+        '天</div><div class="normal"></div><div class="highlight">🔔小胖温馨提示：' +
+        data.tips.value +
+        "</div>",
+      url: "url",
+    },
+    enable_id_trans: 0,
+    enable_duplicate_check: 0,
+    duplicate_check_interval: 1800,
+  };
+  const ret = await axiosPost(
+    `https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${token}`,
+    params
+  );
+  console.log("=================", ret.data);
+}
+async function companyPublishWater() {
+  const token = await getCompanyToken();
+  const params = {
+    touser: "@all",
+    msgtype: "news",
+    agentid: 1000002,
+    news: {
+      articles: [
+        {
+          title: "提醒喝水小助手",
+          description:
+            "👉 小胖牌提醒喝水小助手来啦！宝宝要主动喝水，而不是等到口渴了才去喝很多水，要做每天喝8杯水的乖宝宝哦~",
+          url: "URL",
+          picurl:
+            "https://ethanwp.oss-cn-shenzhen.aliyuncs.com/download/water.webp",
+        },
+      ],
+    },
+    enable_id_trans: 0,
+    enable_duplicate_check: 0,
+    duplicate_check_interval: 1800,
+  };
+  const ret = await axiosPost(
+    `https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${token}`,
+    params
+  );
+  console.log("=================", ret.data);
+}
 /**
  * 测试推送接口
  * @returns {Promise<void>}
  */
 async function test() {
-  return await publishWater();
+  await companyPublishWater();
+  return "success";
 }
 
 /**
@@ -225,4 +296,7 @@ module.exports = {
   authVerityApi,
   test,
   pusher,
+  publishWater,
+  companyPublishHello,
+  companyPublishWater,
 };
