@@ -1,36 +1,33 @@
 const { CloudBaseRunServer } = require("./server");
 const routes = require("./routes/index");
 const schedule = require("node-schedule");
-const {
-  companyPublishHello,
-  companyPublishWater,
-} = require("./service/authService");
+const { pusher, publishWater } = require("./service/authService");
 
 // 启动任务
 schedule.scheduleJob("0 0 8 * * *", async () => {
   console.log("========定时任务启动======", new Date());
-  await companyPublishHello();
+  await pusher();
 });
 
 // 09：30 提醒一次
 schedule.scheduleJob("0 30 9 * * *", async () => {
   console.log("========定时任务启动======", new Date());
-  await companyPublishWater();
+  await publishWater();
 });
 // 10：30 提醒一次
 schedule.scheduleJob("0 30 10 * * *", async () => {
   console.log("========定时任务启动======", new Date());
-  await companyPublishWater();
+  await publishWater();
 });
 // 14：00 提醒一次
 schedule.scheduleJob("0 0 14 * * *", async () => {
   console.log("========定时任务启动======", new Date());
-  await companyPublishWater();
+  await publishWater();
 });
 // 16：00 提醒一次
 schedule.scheduleJob("0 0 16 * * *", async () => {
   console.log("========定时任务启动======", new Date());
-  await companyPublishWater();
+  await publishWater();
 });
 
 // 创建云托管 Server 实例
