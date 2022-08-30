@@ -42,11 +42,10 @@ async function companyPublishGreet() {
     enable_duplicate_check: 0,
     duplicate_check_interval: 1800,
   };
-  const ret = await axiosPost(
+  await axiosPost(
     `https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${token}`,
     params
   );
-  console.log("=================", ret.data);
 }
 // 喝水提醒
 async function companyPublishWater() {
@@ -71,11 +70,10 @@ async function companyPublishWater() {
     enable_duplicate_check: 0,
     duplicate_check_interval: 1800,
   };
-  const ret = await axiosPost(
+  await axiosPost(
     `https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${token}`,
     params
   );
-  console.log("=================", ret.data);
 }
 /**
  * 测试推送接口
