@@ -1,99 +1,88 @@
 const config = require("../config/config");
 const { axiosGet, axiosPost } = require("../core/useAxios");
-const sha1 = require("node-sha1"); //加密模块
 
-/**
- * 默认的接口进行微信公众号验证
- * @param event
- * @param req
- * @param res
- * @returns {Promise<void>}
- */
-async function authVerityApi(event, req, res) {
-  const token = config.token; //获取配置的token
-  const signature = req.query.signature; //获取微信发送请求参数signature
-  const nonce = req.query.nonce; //获取微信发送请求参数nonce
-  const timestamp = req.query.timestamp; //获取微信发送请求参数timestamp
-
-  const str = [token, timestamp, nonce].sort().join(""); //排序token、timestamp、nonce后转换为组合字符串
-  const sha = sha1(str); //加密组合字符串
-
-  //如果加密组合结果等于微信的请求参数signature，验证通过
-  if (sha === signature) {
-    const { echostr } = req.query; //获取微信请求参数echostr
-    res.send(echostr + ""); //正常返回请求参数echostr
-  } else {
-    res.send("验证失败");
-  }
+// 获取token
+async function getCompanyToken() {
+  const corpId = config.corpId;
+  const corpSecret = config.corpSecret;
+  const result = await axiosGet(
+    `https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=${corpId}&corpsecret=${corpSecret}`
+  );
+  return result.data.access_token;
 }
-
-/**
- * 获取微信的token进行验证
- * @returns {Promise<*>}
- */
-async function getToken() {
+// 早安提醒
+async function companyPublishGreet() {
+  const token = await getCompanyToken();
+  const data = await getInfo();
   const params = {
-    grant_type: config.grant_type,
-    appid: config.appid,
-    secret: config.secret,
+    touser: "@all",
+    msgtype: "textcard",
+    agentid: 1000002,
+    textcard: {
+      title: "早上好，宝宝~",
+      description:
+        '<div class="normal">👨🏻‍💻今天是：' +
+        data.today.value +
+        '</div><div class="normal">☀️今日天气：' +
+        data.weatherStr.value +
+        '</div><div class="normal">👆🏻最高气温：' +
+        data.weatherHigh.value +
+        '℃</div><div class="normal">👇🏻最低气温：' +
+        data.weatherLow.value +
+        '℃</div><div class="normal"></div><div class="normal">🥰今天是我们在一起的第' +
+        data.linaAi.value +
+        '天</div><div class="normal">🎂距离宝宝的生日还有' +
+        data.birthday.value +
+        '天</div><div class="normal"></div><div class="highlight">🔔小胖温馨提示：' +
+        data.tips.value +
+        "</div>",
+      url: "url",
+    },
+    enable_id_trans: 0,
+    enable_duplicate_check: 0,
+    duplicate_check_interval: 1800,
   };
-  let { data } = await axiosGet(
-    "https://api.weixin.qq.com/cgi-bin/token",
+  const ret = await axiosPost(
+    `https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${token}`,
     params
   );
-  return data.access_token;
+  console.log("=================", ret.data);
 }
-
-/**
- * 推送
- * @returns {Promise<void>}
- */
-async function pusher() {
-  const token = await getToken();
-  const url =
-    "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" +
-    token;
-  const data = await getInfo();
-  // bb
+// 喝水提醒
+async function companyPublishWater() {
+  const token = await getCompanyToken();
   const params = {
-    ...config.user_bb,
-    topcolor: "#FF0000",
-    data,
+    touser: "@all",
+    msgtype: "news",
+    agentid: 1000002,
+    news: {
+      articles: [
+        {
+          title: "提醒喝水小助手",
+          description:
+            "👉 小胖牌提醒喝水小助手来啦！宝宝要主动喝水，而不是等到口渴了才去喝很多水，要做每天喝8杯水的乖宝宝哦~",
+          url: "URL",
+          picurl:
+            "https://ethanwp.oss-cn-shenzhen.aliyuncs.com/download/water.webp",
+        },
+      ],
+    },
+    enable_id_trans: 0,
+    enable_duplicate_check: 0,
+    duplicate_check_interval: 1800,
   };
-  // pp
-  const params2 = {
-    ...config.user_pp,
-    topcolor: "#FF0000",
-    data,
-  };
-  console.log("==================", data);
-  await axiosPost(url, params2);
-  await axiosPost(url, params);
-}
-// 喝水推送
-async function publishWater() {
-  const token = await getToken();
-  const url =
-    "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" +
-    token;
-  // 喝水助手
-  const params1 = {
-    ...config.water_pp,
-    topcolor: "#FF0000",
-  };
-  const params2 = {
-    ...config.water_bb,
-    topcolor: "#FF0000",
-  };
-  await axiosPost(url, params1);
-  await axiosPost(url, params2);
+  const ret = await axiosPost(
+    `https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${token}`,
+    params
+  );
+  console.log("=================", ret.data);
 }
 /**
  * 测试推送接口
  * @returns {Promise<void>}
  */
 async function test() {
-  await pusher();
+  await companyPublishGreet();
   return "success";
 }
 
@@ -222,8 +211,7 @@ function getDistanceSpecifiedTime(dateTime) {
 }
 
 module.exports = {
-  authVerityApi,
+  companyPublishGreet,
+  companyPublishWater,
   test,
-  pusher,
-  publishWater,
 };

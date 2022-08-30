@@ -6,10 +6,6 @@ const authController = require("../controller/authController");
  */
 const auth = [
   {
-    path: "/",
-    handler: authController.authVerity,
-  },
-  {
     path: "/test",
     handler: authController.testDo,
   },
