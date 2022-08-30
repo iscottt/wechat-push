@@ -22,19 +22,19 @@ async function companyPublishGreet() {
       title: "早上好，宝宝~",
       description:
         '<div class="normal">👨🏻‍💻今天是：' +
-        data.today.value +
+        data.todayStr +
         '</div><div class="normal">☀️今日天气：' +
-        data.weatherStr.value +
+        data.weatherStr +
         '</div><div class="normal">👆🏻最高气温：' +
-        data.weatherHigh.value +
+        data.weatherHigh +
         '℃</div><div class="normal">👇🏻最低气温：' +
-        data.weatherLow.value +
+        data.weatherLow +
         '℃</div><div class="normal"></div><div class="normal">🥰今天是我们在一起的第' +
-        data.linaAi.value +
+        data.linaAi +
         '天</div><div class="normal">🎂距离宝宝的生日还有' +
-        data.birthday.value +
+        data.birthday +
         '天</div><div class="normal"></div><div class="highlight">🔔小胖温馨提示：' +
-        data.tips.value +
+        data.tips +
         "</div>",
       url: "url",
     },
@@ -110,40 +110,16 @@ async function getInfo() {
   // 距生日还剩多少天
   const birthday = getDistanceSpecifiedTime(config.birthday);
   // 早安心语（彩虹屁）
-  const text = await getTips();
+  const rainbow = await getTips();
   return {
-    today: {
-      value: todayStr,
-      color: "#00BFFF",
-    },
-    weatherStr: {
-      value: weatherStr,
-      color: "#00FFFF",
-    },
-    weatherHigh: {
-      value: weatherHigh,
-      color: "#FF6347",
-    },
-    weatherLow: {
-      value: weatherLow,
-      color: "#173177",
-    },
-    linaAi: {
-      value: linaAi,
-      color: "#FF1493",
-    },
-    birthday: {
-      value: birthday,
-      color: "#FFA500",
-    },
-    tips: {
-      value: tips,
-      color: "#67c23a",
-    },
-    text: {
-      value: text,
-      color: "#FF69B4",
-    },
+    todayStr,
+    weatherStr,
+    weatherHigh,
+    weatherLow,
+    linaAi,
+    birthday,
+    tips,
+    rainbow,
   };
 }
 
