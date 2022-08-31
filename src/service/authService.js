@@ -15,7 +15,7 @@ async function companyPublishGreet() {
   const token = await getCompanyToken();
   const data = await getInfo();
   const params = {
-    touser: "PengRuiNan",
+    touser: "@all",
     msgtype: "textcard",
     agentid: 1000002,
     textcard: {
