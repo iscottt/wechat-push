@@ -168,6 +168,10 @@ function formatTips(weather) {
     return "今天将降雨，出门请别忘带伞~";
   } else if (~weather.indexOf("雷")) {
     return "今天将有雷雨，路面湿滑，能见度低，行走时注意观察周围环境，避免滑倒、及时避让车辆。";
+  } else if (~weather.indexOf("阴")) {
+    return "阴天也要注意保暖多穿点衣服哦~";
+  } else {
+    return "不管是晴天还是雨天，每天都是爱你的一天~";
   }
 }
 
