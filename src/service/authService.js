@@ -15,27 +15,32 @@ async function companyPublishGreet() {
   const token = await getCompanyToken();
   const data = await getInfo();
   const params = {
-    touser: "@all",
+    touser: "PengRuiNan",
     msgtype: "textcard",
     agentid: 1000002,
     textcard: {
       title: "早上好，宝宝~",
       description:
-        '<div class="normal">👨🏻‍💻今天是：' +
+        "👨🏻‍💻今天是：" +
         data.todayStr +
-        '</div><div class="normal">☀️今日天气：' +
+        "\n☀️今日天气：" +
         data.weatherStr +
-        '</div><div class="normal">👆🏻最高气温：' +
+        "\n🔥最高气温：" +
         data.weatherHigh +
-        '℃</div><div class="normal">👇🏻最低气温：' +
+        "℃\n🧊最低气温：" +
         data.weatherLow +
-        '℃</div><div class="normal"></div><div class="normal">🥰今天是我们在一起的第' +
+        "℃\n🌟体感温度：" +
+        data.feel +
+        "℃\n💨风向风力：" +
+        data.wind +
+        "\n\n🥰今天是我们在一起的第" +
         data.linaAi +
-        '天</div><div class="normal">🎂距离宝宝的生日还有' +
+        "天\n🎂距离宝宝的生日还有" +
         data.birthday +
-        '天</div><div class="normal"></div><div class="highlight">🔔小胖温馨提示：' +
+        "天\n\n🔔小胖温馨提示：" +
         data.tips +
-        "</div>",
+        "\n🎈早安心语：" +
+        data.rainbow,
       url: "url",
     },
     enable_id_trans: 0,
@@ -91,11 +96,13 @@ async function getInfo() {
   const weatherAk = config.weatherAk;
   const { data } = await axiosGet(`https://api.map.baidu.com/weather/v1/`, {
     district_id: "330100",
-    data_type: "fc",
+    data_type: "all",
     ak: weatherAk,
   });
   // 获取今天的信息
   const today = data.result.forecasts[0];
+  const feel = data.result.now.feels_like;
+  const wind = data.result.now.wind_dir + " " + data.result.now.wind_class;
   const todayStr = `${today.date} ${today.week}`;
   // 今日天气
   const weatherStr = today.text_day;
@@ -114,6 +121,8 @@ async function getInfo() {
     weatherStr,
     weatherHigh,
     weatherLow,
+    feel,
+    wind,
     linaAi,
     birthday,
     tips,
