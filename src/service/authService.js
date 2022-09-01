@@ -1,7 +1,10 @@
 const config = require("../config/config");
 const { axiosGet, axiosPost } = require("../core/useAxios");
 
-// 获取token
+/**
+ * 获取企业微信token
+ * @returns {Promise<*>}
+ */
 async function getCompanyToken() {
   const corpId = config.corpId;
   const corpSecret = config.corpSecret;
@@ -10,37 +13,39 @@ async function getCompanyToken() {
   );
   return result.data.access_token;
 }
-// 早安提醒
+
+/**
+ * 早安提醒
+ * @returns {Promise<void>}
+ */
 async function companyPublishGreet() {
   const token = await getCompanyToken();
   const data = await getInfo();
   const params = {
-    touser: "@all",
+    touser: "PengRuiNan",
     msgtype: "textcard",
     agentid: 1000002,
     textcard: {
       title: "早上好，宝宝~",
       description:
-        "👨🏻‍💻今天是：" +
+        "今天是：🎉 " +
         data.todayStr +
-        "\n☀️今日天气：" +
+        " 🎉\n今日天气：" +
         data.weatherStr +
-        "\n🔥最高气温：" +
-        data.weatherHigh +
-        "℃\n🧊最低气温：" +
+        "\n今日气温：" +
         data.weatherLow +
-        "℃\n🌟体感温度：" +
+        "℃~" +
+        data.weatherHigh +
+        "℃\n体感温度：" +
         data.feel +
-        "℃\n💨风向风力：" +
-        data.wind +
-        "\n\n🥰今天是我们在一起的第" +
+        "℃\n\n🥰今天是我们在一起的第" +
         data.linaAi +
-        "天\n🎂距离宝宝的生日还有" +
+        "天\n🎂距离宝宝生日还有" +
         data.birthday +
-        "天\n\n🔔小胖温馨提示：" +
-        data.tips +
-        "\n🎈早安心语：" +
-        data.rainbow,
+        "天\n\n🤧今日感冒指数：" +
+        data.cold +
+        "\n\n🔔小胖温馨提示：今日紫外线" +
+        data.UV,
       url: "url",
     },
     enable_id_trans: 0,
@@ -52,7 +57,11 @@ async function companyPublishGreet() {
     params
   );
 }
-// 喝水提醒
+
+/**
+ * 喝水提醒
+ * @returns {Promise<void>}
+ */
 async function companyPublishWater() {
   const token = await getCompanyToken();
   const params = {
@@ -80,6 +89,21 @@ async function companyPublishWater() {
     params
   );
 }
+
+/**
+ * 获取天气生活指数
+ * @returns {Promise<{UV: *, cold: *}>}
+ */
+async function getSuggest() {
+  const url = `https://devapi.qweather.com/v7/indices/1d?location=${config.lon},${config.lat}&key=${config.qWeatherKey}&type=5,9`;
+  const { data } = await axiosGet(url, {});
+  const dailies = data.daily;
+  return {
+    UV: dailies[0].text,
+    cold: dailies[1].text,
+  };
+}
+
 /**
  * 测试推送接口
  * @returns {Promise<void>}
@@ -87,6 +111,31 @@ async function companyPublishWater() {
 async function test() {
   await companyPublishGreet();
   return "success";
+}
+
+/**
+ * 将天气转换为带emoji的字符
+ * @param weather
+ * @returns {Promise<string|*>}
+ */
+async function formatStrToEmoji(weather) {
+  if (~weather.indexOf("晴")) {
+    return weather + "☀️";
+  } else if (~weather.indexOf("雨")) {
+    return weather + "🌧";
+  } else if (~weather.indexOf("雪")) {
+    return weather + "🌨️";
+  } else if (~weather.indexOf("雾")) {
+    return weather + "🌫️";
+  } else if (~weather.indexOf("雷")) {
+    return weather + "⛈️";
+  } else if (~weather.indexOf("阴")) {
+    return weather + "☁️️";
+  } else if (~weather.indexOf("多云")) {
+    return weather + "⛅️️️";
+  } else {
+    return weather;
+  }
 }
 
 /**
@@ -105,17 +154,15 @@ async function getInfo() {
   const wind = data.result.now.wind_dir + " " + data.result.now.wind_class;
   const todayStr = `${today.date} ${today.week}`;
   // 今日天气
-  const weatherStr = today.text_day;
+  const weatherStr = await formatStrToEmoji(today.text_day);
   const weatherHigh = today.high;
   const weatherLow = today.low;
-  // 天气温馨提示
-  const tips = formatTips(today.text_day);
   // 在一起多少天
   const linaAi = getDateByDays();
   // 距生日还剩多少天
   const birthday = getDistanceSpecifiedTime(config.birthday);
-  // 早安心语（彩虹屁）
-  const rainbow = await getTips();
+  // 天气建议
+  const exponent = await getSuggest();
   return {
     todayStr,
     weatherStr,
@@ -125,8 +172,9 @@ async function getInfo() {
     wind,
     linaAi,
     birthday,
-    tips,
     rainbow,
+    UV: exponent.UV,
+    cold: exponent.cold,
   };
 }
 

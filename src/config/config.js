@@ -15,4 +15,9 @@ module.exports = {
   birthday: "2022-12-22",
   // 纪念日
   anniversary: "2021-03-16",
+  // 和风天气key
+  qWeatherKey: "97bff3732b564eb5bf00bfd764859de3",
+  // 需要查询的城市经纬度
+  lat: "30.28745",
+  lon: "120.15358",
 };
