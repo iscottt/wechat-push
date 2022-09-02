@@ -172,7 +172,6 @@ async function getInfo() {
     wind,
     linaAi,
     birthday,
-    rainbow,
     UV: exponent.UV,
     cold: exponent.cold,
   };
