@@ -23,30 +23,35 @@ async function companyPublishGreet() {
   const data = await getInfo();
   const params = {
     touser: "@all",
-    msgtype: "textcard",
+    msgtype: "news",
     agentid: 1000002,
-    textcard: {
-      title: "早上好，宝宝~",
-      description:
-        "今天是：🎉 " +
-        data.todayStr +
-        " 🎉\n今日天气：" +
-        data.weatherStr +
-        "\n今日气温：" +
-        data.weatherLow +
-        "℃~" +
-        data.weatherHigh +
-        "℃\n体感温度：" +
-        data.feel +
-        "℃\n\n🥰今天是我们在一起的第" +
-        data.linaAi +
-        "天\n🎂距离宝宝生日还有" +
-        data.birthday +
-        "天\n\n🤧今日感冒指数：" +
-        data.cold +
-        "\n\n🔔小胖温馨提示：今日紫外线" +
-        data.UV,
-      url: "url",
+    news: {
+      articles: [
+        {
+          picurl:
+            "https://ethanwp.oss-cn-shenzhen.aliyuncs.com/download/IMG_0519.JPG",
+          title: "早上好，宝宝~",
+          description:
+            "今天是：🎉 " +
+            data.todayStr +
+            " 🎉\n今日天气：" +
+            data.weatherStr +
+            "\n今日气温：" +
+            data.weatherLow +
+            "℃~" +
+            data.weatherHigh +
+            "℃\n体感温度：" +
+            data.feel +
+            "℃\n\n🥰今天是我们在一起的第" +
+            data.linaAi +
+            "天\n🎂距离宝宝生日还有" +
+            data.birthday +
+            "天\n\n🤧今日感冒指数：" +
+            data.cold +
+            "\n\n🔔小胖温馨提示：今日紫外线" +
+            data.UV,
+        },
+      ],
     },
     enable_id_trans: 0,
     enable_duplicate_check: 0,
