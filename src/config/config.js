@@ -13,6 +13,7 @@ module.exports = {
   tipsKey: "65fde3d56315ff3eba6b679e3e17779d",
   // 生日
   birthday: "2022-12-22",
+  birthdaySolar: "2022-11-29",
   // 纪念日
   anniversary: "2021-03-16",
   // 和风天气key

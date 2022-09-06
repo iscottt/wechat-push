@@ -1,5 +1,6 @@
 const config = require("../config/config");
 const { axiosGet, axiosPost } = require("../core/useAxios");
+const { Lunar } = require("../core/useDays");
 
 /**
  * 获取企业微信token
@@ -165,7 +166,7 @@ async function getInfo() {
   // 在一起多少天
   const linaAi = getDateByDays();
   // 距生日还剩多少天
-  const birthday = getDistanceSpecifiedTime(config.birthday);
+  const birthday = getDistanceSpecifiedTime(config.birthdaySolar, true);
   // 天气建议
   const exponent = await getSuggest();
   return {
@@ -237,12 +238,21 @@ function formatTips(weather) {
 }
 
 /**
- * 生日倒计时
+ *
  * @param dateTime
+ * @param isSolar 是否农历生日
+ * @returns {number}
  */
-function getDistanceSpecifiedTime(dateTime) {
+function getDistanceSpecifiedTime(dateTime, isSolar) {
   // 指定日期和时间
-  const EndTime = new Date(dateTime);
+  let EndTime;
+  if (isSolar) {
+    const date = dateTime.split("-");
+    const result = Lunar.toSolar(date[0], date[1], date[2]);
+    EndTime = new Date(`${result[0]}-${result[1]}-${result[2]}`);
+  } else {
+    EndTime = new Date(dateTime);
+  }
   // 当前系统时间
   const NowTime = new Date();
   // 两个时间的相差天数
