@@ -15,47 +15,44 @@ async function getCompanyToken() {
 
 /**
  * 早安提醒
- * @returns {Promise<void>}
+ * @returns {Promise<*>}
  */
 async function companyPublishGreet() {
   const token = await getCompanyToken();
   const data = await getInfo();
   const params = {
     touser: '@all',
-    msgtype: 'news',
-    agentid: config.agentid,
-    news: {
-      articles: [
-        {
-          picurl: 'https://ethanwp.oss-cn-shenzhen.aliyuncs.com/download/IMG_0519.JPG',
-          title: '早上好，宝宝~',
-          description:
-            '今天是：🎉 ' +
-            data.todayStr +
-            ' 🎉\n今日天气：' +
-            data.weatherStr +
-            '\n今日气温：' +
-            data.weatherLow +
-            '℃~' +
-            data.weatherHigh +
-            '℃\n体感温度：' +
-            data.feel +
-            '℃\n\n🥰今天是我们在一起的第' +
-            data.linaAi +
-            '天\n🎂距离宝宝生日还有' +
-            data.birthday +
-            '天\n\n🤧今日感冒指数：' +
-            data.cold +
-            '\n\n🔔小胖温馨提示：今日紫外线' +
-            data.UV,
-        },
-      ],
+    msgtype: 'textcard',
+    agentid: 1000002,
+    textcard: {
+      title: '早上好，宝宝~',
+      description:
+        '今天是：' +
+        data.todayStr +
+        '\n今日天气：' +
+        data.weatherStr +
+        '\n今日气温：' +
+        data.weatherLow +
+        '℃~' +
+        data.weatherHigh +
+        '℃\n体感温度：' +
+        data.feel +
+        '℃\n\n🥰今天是我们在一起的第' +
+        data.linaAi +
+        '天\n🎂距离宝宝生日还有' +
+        data.birthday +
+        '天\n\n' +
+        '🔔小胖温馨提示：' +
+        data.tips +
+        '\n🎈早安心语：' +
+        data.rainbow,
+      url: 'url',
     },
     enable_id_trans: 0,
     enable_duplicate_check: 0,
     duplicate_check_interval: 1800,
   };
-  await axiosPost(`https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${token}`, params);
+  const ret = await axiosPost(`https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${token}`, params);
 }
 
 /**
@@ -83,20 +80,6 @@ async function companyPublishWater() {
     duplicate_check_interval: 1800,
   };
   await axiosPost(`https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${token}`, params);
-}
-
-/**
- * 获取天气生活指数
- * @returns {Promise<{UV: *, cold: *}>}
- */
-async function getSuggest() {
-  const url = `https://devapi.qweather.com/v7/indices/1d?location=${config.lon},${config.lat}&key=${config.qWeatherKey}&type=5,9`;
-  const { data } = await axiosGet(url, {});
-  const dailies = data.daily;
-  return {
-    UV: dailies[0].text,
-    cold: dailies[1].text,
-  };
 }
 
 /**
@@ -156,8 +139,10 @@ async function getInfo() {
   const linaAi = getDateByDays();
   // 距生日还剩多少天
   const birthday = getDistanceSpecifiedTime(config.isSloar ? config.birthdaySolar : config.birthday, config.isSloar);
-  // 天气建议
-  const exponent = await getSuggest();
+  // 天气温馨提示
+  const tips = formatTips(today.text_day);
+  // 早安心语（彩虹屁）
+  const rainbow = await getTips();
   return {
     todayStr,
     weatherStr,
@@ -167,8 +152,8 @@ async function getInfo() {
     wind,
     linaAi,
     birthday,
-    UV: exponent.UV,
-    cold: exponent.cold,
+    tips,
+    rainbow,
   };
 }
 
