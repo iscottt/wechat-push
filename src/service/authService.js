@@ -1,6 +1,6 @@
-const config = require("../config/config");
-const { axiosGet, axiosPost } = require("../core/useAxios");
-const { Lunar } = require("../core/useDays");
+const config = require('../config/config');
+const { axiosGet, axiosPost } = require('../core/useAxios');
+const { Lunar } = require('../core/useDays');
 
 /**
  * 获取企业微信token
@@ -9,9 +9,7 @@ const { Lunar } = require("../core/useDays");
 async function getCompanyToken() {
   const corpId = config.corpId;
   const corpSecret = config.corpSecret;
-  const result = await axiosGet(
-    `https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=${corpId}&corpsecret=${corpSecret}`
-  );
+  const result = await axiosGet(`https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=${corpId}&corpsecret=${corpSecret}`);
   return result.data.access_token;
 }
 
@@ -23,33 +21,32 @@ async function companyPublishGreet() {
   const token = await getCompanyToken();
   const data = await getInfo();
   const params = {
-    touser: "@all",
-    msgtype: "news",
-    agentid: 1000002,
+    touser: '@all',
+    msgtype: 'news',
+    agentid: config.agentid,
     news: {
       articles: [
         {
-          picurl:
-            "https://ethanwp.oss-cn-shenzhen.aliyuncs.com/download/IMG_0519.JPG",
-          title: "早上好，宝宝~",
+          picurl: 'https://ethanwp.oss-cn-shenzhen.aliyuncs.com/download/IMG_0519.JPG',
+          title: '早上好，宝宝~',
           description:
-            "今天是：🎉 " +
+            '今天是：🎉 ' +
             data.todayStr +
-            " 🎉\n今日天气：" +
+            ' 🎉\n今日天气：' +
             data.weatherStr +
-            "\n今日气温：" +
+            '\n今日气温：' +
             data.weatherLow +
-            "℃~" +
+            '℃~' +
             data.weatherHigh +
-            "℃\n体感温度：" +
+            '℃\n体感温度：' +
             data.feel +
-            "℃\n\n🥰今天是我们在一起的第" +
+            '℃\n\n🥰今天是我们在一起的第' +
             data.linaAi +
-            "天\n🎂距离宝宝生日还有" +
+            '天\n🎂距离宝宝生日还有' +
             data.birthday +
-            "天\n\n🤧今日感冒指数：" +
+            '天\n\n🤧今日感冒指数：' +
             data.cold +
-            "\n\n🔔小胖温馨提示：今日紫外线" +
+            '\n\n🔔小胖温馨提示：今日紫外线' +
             data.UV,
         },
       ],
@@ -58,10 +55,7 @@ async function companyPublishGreet() {
     enable_duplicate_check: 0,
     duplicate_check_interval: 1800,
   };
-  await axiosPost(
-    `https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${token}`,
-    params
-  );
+  await axiosPost(`https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${token}`, params);
 }
 
 /**
@@ -71,18 +65,16 @@ async function companyPublishGreet() {
 async function companyPublishWater() {
   const token = await getCompanyToken();
   const params = {
-    touser: "@all",
-    msgtype: "news",
-    agentid: 1000002,
+    touser: '@all',
+    msgtype: 'news',
+    agentid: config.agentid,
     news: {
       articles: [
         {
-          title: "提醒喝水小助手",
-          description:
-            "👉 小胖牌提醒喝水小助手来啦！宝宝要主动喝水，而不是等到口渴了才去喝很多水，要做每天喝8杯水的乖宝宝哦~",
-          url: "URL",
-          picurl:
-            "https://ethanwp.oss-cn-shenzhen.aliyuncs.com/download/water.webp",
+          title: '提醒喝水小助手',
+          description: '👉 小胖牌提醒喝水小助手来啦！宝宝要主动喝水，而不是等到口渴了才去喝很多水，要做每天喝8杯水的乖宝宝哦~',
+          url: 'URL',
+          picurl: 'https://ethanwp.oss-cn-shenzhen.aliyuncs.com/download/water.webp',
         },
       ],
     },
@@ -90,10 +82,7 @@ async function companyPublishWater() {
     enable_duplicate_check: 0,
     duplicate_check_interval: 1800,
   };
-  await axiosPost(
-    `https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${token}`,
-    params
-  );
+  await axiosPost(`https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${token}`, params);
 }
 
 /**
@@ -116,7 +105,7 @@ async function getSuggest() {
  */
 async function test() {
   await companyPublishGreet();
-  return "success";
+  return 'success';
 }
 
 /**
@@ -125,20 +114,20 @@ async function test() {
  * @returns {Promise<string|*>}
  */
 async function formatStrToEmoji(weather) {
-  if (~weather.indexOf("晴")) {
-    return weather + "☀️";
-  } else if (~weather.indexOf("雨")) {
-    return weather + "🌧";
-  } else if (~weather.indexOf("雪")) {
-    return weather + "🌨️";
-  } else if (~weather.indexOf("雾")) {
-    return weather + "🌫️";
-  } else if (~weather.indexOf("雷")) {
-    return weather + "⛈️";
-  } else if (~weather.indexOf("阴")) {
-    return weather + "☁️️";
-  } else if (~weather.indexOf("多云")) {
-    return weather + "⛅️️️";
+  if (~weather.indexOf('晴')) {
+    return weather + '☀️';
+  } else if (~weather.indexOf('雨')) {
+    return weather + '🌧';
+  } else if (~weather.indexOf('雪')) {
+    return weather + '🌨️';
+  } else if (~weather.indexOf('雾')) {
+    return weather + '🌫️';
+  } else if (~weather.indexOf('雷')) {
+    return weather + '⛈️';
+  } else if (~weather.indexOf('阴')) {
+    return weather + '☁️️';
+  } else if (~weather.indexOf('多云')) {
+    return weather + '⛅️️️';
   } else {
     return weather;
   }
@@ -150,14 +139,14 @@ async function formatStrToEmoji(weather) {
 async function getInfo() {
   const weatherAk = config.weatherAk;
   const { data } = await axiosGet(`https://api.map.baidu.com/weather/v1/`, {
-    district_id: "330100",
-    data_type: "all",
+    district_id: config.district_id,
+    data_type: 'all',
     ak: weatherAk,
   });
   // 获取今天的信息
   const today = data.result.forecasts[0];
   const feel = data.result.now.feels_like;
-  const wind = data.result.now.wind_dir + " " + data.result.now.wind_class;
+  const wind = data.result.now.wind_dir + ' ' + data.result.now.wind_class;
   const todayStr = `${today.date} ${today.week}`;
   // 今日天气
   const weatherStr = await formatStrToEmoji(today.text_day);
@@ -166,7 +155,7 @@ async function getInfo() {
   // 在一起多少天
   const linaAi = getDateByDays();
   // 距生日还剩多少天
-  const birthday = getDistanceSpecifiedTime(config.birthdaySolar, true);
+  const birthday = getDistanceSpecifiedTime(config.isSloar ? config.birthdaySolar : config.birthday, config.isSloar);
   // 天气建议
   const exponent = await getSuggest();
   return {
@@ -202,7 +191,7 @@ function getDateByDays() {
  * @returns {Promise<string|DocumentFragment>}
  */
 async function getTips() {
-  const { data } = await axiosGet("http://api.tianapi.com/caihongpi/index", {
+  const { data } = await axiosGet('http://api.tianapi.com/caihongpi/index', {
     key: config.tipsKey,
   });
   return data.newslist[0].content;
@@ -214,26 +203,21 @@ async function getTips() {
  * @returns {string}
  */
 function formatTips(weather) {
-  const tips = [
-    "天气炎热，请注意防暑防晒~",
-    `近期空气干燥，注意经常补充水分，以保身体健康~`,
-    "天气转热，保证吃好，心情舒畅，燥热较少。",
-    "持续高温天闷热，防暑降温莫忽略，冷饮冷食谨慎吃。",
-  ];
-  if (~weather.indexOf("晴")) {
+  const tips = ['天气炎热，请注意防暑防晒~', `近期空气干燥，注意经常补充水分，以保身体健康~`, '天气转热，保证吃好，心情舒畅，燥热较少。', '持续高温天闷热，防暑降温莫忽略，冷饮冷食谨慎吃。'];
+  if (~weather.indexOf('晴')) {
     return tips[Math.floor(Math.random() * 4)];
-  } else if (~weather.indexOf("雨")) {
-    return "今天将降雨，出门请别忘带伞~";
-  } else if (~weather.indexOf("雪")) {
-    return "雪天路滑，出行时请注意防滑~";
-  } else if (~weather.indexOf("雾")) {
-    return "今天将降雨，出门请别忘带伞~";
-  } else if (~weather.indexOf("雷")) {
-    return "今天将有雷雨，路面湿滑，能见度低，行走时注意观察周围环境，避免滑倒、及时避让车辆。";
-  } else if (~weather.indexOf("阴")) {
-    return "阴天也要注意保暖多穿点衣服哦~";
+  } else if (~weather.indexOf('雨')) {
+    return '今天将降雨，出门请别忘带伞~';
+  } else if (~weather.indexOf('雪')) {
+    return '雪天路滑，出行时请注意防滑~';
+  } else if (~weather.indexOf('雾')) {
+    return '今天将降雨，出门请别忘带伞~';
+  } else if (~weather.indexOf('雷')) {
+    return '今天将有雷雨，路面湿滑，能见度低，行走时注意观察周围环境，避免滑倒、及时避让车辆。';
+  } else if (~weather.indexOf('阴')) {
+    return '阴天也要注意保暖多穿点衣服哦~';
   } else {
-    return "不管是晴天还是雨天，每天都是爱你的一天~";
+    return '不管是晴天还是雨天，每天都是爱你的一天~';
   }
 }
 
@@ -247,7 +231,7 @@ function getDistanceSpecifiedTime(dateTime, isSolar) {
   // 指定日期和时间
   let EndTime;
   if (isSolar) {
-    const date = dateTime.split("-");
+    const date = dateTime.split('-');
     const result = Lunar.toSolar(date[0], date[1], date[2]);
     EndTime = new Date(`${result[0]}-${result[1]}-${result[2]}`);
   } else {
