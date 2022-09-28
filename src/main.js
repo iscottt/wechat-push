@@ -1,35 +1,32 @@
-const { CloudBaseRunServer } = require("./server");
-const routes = require("./routes/index");
-const schedule = require("node-schedule");
-const {
-  companyPublishGreet,
-  companyPublishWater,
-} = require("./service/authService");
+const { CloudBaseRunServer } = require('./server');
+const routes = require('./routes/index');
+const schedule = require('node-schedule');
+const { companyPublishGreet, companyPublishWater } = require('./service/authService');
 
 // 启动任务
-schedule.scheduleJob("0 0 8 * * *", async () => {
-  console.log("========定时任务启动======", new Date());
+schedule.scheduleJob('0 30 7 * * *', async () => {
+  console.log('========定时任务启动======', new Date());
   await companyPublishGreet();
 });
 
 // 09：30 提醒一次
-schedule.scheduleJob("0 30 9 * * *", async () => {
-  console.log("========定时任务启动======", new Date());
+schedule.scheduleJob('0 30 9 * * *', async () => {
+  console.log('========定时任务启动======', new Date());
   await companyPublishWater();
 });
 // 10：30 提醒一次
-schedule.scheduleJob("0 30 10 * * *", async () => {
-  console.log("========定时任务启动======", new Date());
+schedule.scheduleJob('0 30 10 * * *', async () => {
+  console.log('========定时任务启动======', new Date());
   await companyPublishWater();
 });
 // 14：00 提醒一次
-schedule.scheduleJob("0 0 14 * * *", async () => {
-  console.log("========定时任务启动======", new Date());
+schedule.scheduleJob('0 0 14 * * *', async () => {
+  console.log('========定时任务启动======', new Date());
   await companyPublishWater();
 });
 // 16：00 提醒一次
-schedule.scheduleJob("0 0 16 * * *", async () => {
-  console.log("========定时任务启动======", new Date());
+schedule.scheduleJob('0 0 16 * * *', async () => {
+  console.log('========定时任务启动======', new Date());
   await companyPublishWater();
 });
 
