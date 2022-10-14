@@ -14,9 +14,9 @@ module.exports = {
   // 是否使用农历生日
   isSloar: true,
   // 阳历生日
-  birthday: '2022-12-22',
+  birthday: '2022-11-12',
   // 农历生日
-  birthdaySolar: '2022-11-29',
+  birthdaySolar: '2022-10-19',
   // 纪念日
   anniversary: '2021-03-16',
   // 和风天气key
