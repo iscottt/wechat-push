@@ -1,4 +1,4 @@
-const authController = require("../controller/authController");
+const authController = require('../controller/authController');
 
 /**
  * 接口路由
@@ -6,8 +6,12 @@ const authController = require("../controller/authController");
  */
 const auth = [
   {
-    path: "/test",
+    path: '/test',
     handler: authController.testDo,
+  },
+  {
+    path: '/get-ip',
+    handler: authController.getIpDo,
   },
 ];
 

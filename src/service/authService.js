@@ -1,6 +1,7 @@
 const config = require('../config/config');
 const { axiosGet, axiosPost } = require('../core/useAxios');
 const { Lunar } = require('../core/useDays');
+const { Buffer } = require('buffer');
 
 /**
  * 获取企业微信token
@@ -106,6 +107,26 @@ async function getSuggest() {
 async function test() {
   await companyPublishGreet();
   return 'success';
+}
+/**
+ * 测试推送接口
+ * @returns {Promise<void>}
+ */
+async function getIp(event, req, res) {
+  const url = `https://whois.pconline.com.cn/ipJson.jsp`;
+  const data = await axiosGet(
+    url,
+    { json: true, ip: req.query.ip },
+    {
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      responseType: 'arraybuffer',
+    }
+  ); // 使用TextDecoder
+  var enc = new TextDecoder('GBK');
+  var uint8_msg = new Uint8Array(data.data);
+  return enc.decode(uint8_msg);
 }
 
 /**
@@ -247,4 +268,5 @@ module.exports = {
   companyPublishGreet,
   companyPublishWater,
   test,
+  getIp,
 };
