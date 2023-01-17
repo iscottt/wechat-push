@@ -10,22 +10,22 @@ schedule.scheduleJob('0 30 7 * * *', async () => {
 });
 
 // 09：30 提醒一次
-schedule.scheduleJob('0 30 9 * * *', async () => {
+schedule.scheduleJob('0 30 09 ? * MON-FRI', async () => {
   console.log('========定时任务启动======', new Date());
   await companyPublishWater();
 });
 // 10：30 提醒一次
-schedule.scheduleJob('0 30 10 * * *', async () => {
+schedule.scheduleJob('0 30 10 ? * MON-FRI', async () => {
   console.log('========定时任务启动======', new Date());
   await companyPublishWater();
 });
 // 14：00 提醒一次
-schedule.scheduleJob('0 0 14 * * *', async () => {
+schedule.scheduleJob('0 0 14 ? * MON-FRI', async () => {
   console.log('========定时任务启动======', new Date());
   await companyPublishWater();
 });
 // 16：00 提醒一次
-schedule.scheduleJob('0 0 16 * * *', async () => {
+schedule.scheduleJob('0 0 16 ? * MON-FRI', async () => {
   console.log('========定时任务启动======', new Date());
   await companyPublishWater();
 });
