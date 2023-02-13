@@ -42,7 +42,7 @@ class ExpressServer {
     this.server = http.createServer(this.app);
   }
 
-  setRoute(path, handlerFunction) {
+  setRoute(path, handlerFunction, method) {
     const handler = async (req, res) => {
       const event = req.body;
       let result;
@@ -57,10 +57,9 @@ class ExpressServer {
           params = JSON.stringify(event);
         }
         console.log(`req start path = ${req.path}, params = ${params}`);
-        result = await handlerFunction(event, req, res);
+        result = await handlerFunction(event, req, res, params);
         console.log(
-          `req end path = ${req.path}, params = ${params}, costTime = ${
-            new Date().getTime() - startTime
+          `req end path = ${req.path}, params = ${params}, costTime = ${new Date().getTime() - startTime
           }`
         );
       } catch (e) {
@@ -85,7 +84,20 @@ class ExpressServer {
       }
       res.send(result);
     };
-    this.app.get(this.contextPath + path, handler);
+    // this.app.get(this.contextPath + path, handler);
+
+    // TODO: 代码优化
+    switch (method) {
+      case "POST":
+        this.app.post(this.contextPath + path, handler);
+        break;
+      case "GET":
+        this.app.get(this.contextPath + path, handler);
+        break;
+      default:
+        this.app.post(this.contextPath + path, handler);
+        break;
+    }
   }
 
   listen(port) {

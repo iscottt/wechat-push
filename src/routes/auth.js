@@ -13,6 +13,11 @@ const auth = [
     path: '/get-ip',
     handler: authController.getIpDo,
   },
+  {
+    path: '/baidu-push',
+    handler: authController.pushBaiduDo,
+    method:"POST"
+  },
 ];
 
 module.exports = auth;

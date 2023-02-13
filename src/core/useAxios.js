@@ -20,7 +20,7 @@ const axiosGet = function (url, params, config = {}) {
         ...config,
       })
       .then((res) => {
-        console.log('res', res);
+        console.log('res', res.data);
         resolve(res);
       })
       .catch((err) => {

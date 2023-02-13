@@ -1,5 +1,6 @@
 const config = require('../config/config');
 const { axiosGet, axiosPost } = require('../core/useAxios');
+const axios = require('axios');
 const { Lunar } = require('../core/useDays');
 const { Buffer } = require('buffer');
 
@@ -264,9 +265,35 @@ function getDistanceSpecifiedTime(dateTime, isSolar) {
   return Math.ceil(Math.abs(NowTime.getTime() - EndTime.getTime()) / 86400000);
 }
 
+/**
+ * 测试推送接口
+ * @returns {Promise<void>}
+ */
+async function pushBaidu(event, req, res, params) {
+  const url = `http://data.zz.baidu.com/urls?token=${params.token}&site=${params.site}`;
+  if (!JSON.parse(params).urls) {
+    return {
+      code: 400,
+      message: "urls不能为空！"
+    }
+  }
+  const array = [JSON.parse(params).urls]
+  return axios({
+    url,
+    method: 'post',
+    data: array.join('\n'),
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  }).then(res => {
+    return res.data;
+  })
+}
+
 module.exports = {
   companyPublishGreet,
   companyPublishWater,
   test,
   getIp,
+  pushBaidu
 };
