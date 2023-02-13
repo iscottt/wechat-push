@@ -277,11 +277,10 @@ async function pushBaidu(event, req, res, params) {
       message: "urls不能为空！"
     }
   }
-  const array = [JSON.parse(params).urls]
   return axios({
     url,
     method: 'post',
-    data: array.join('\n'),
+    data: params.urls.join('\n'),
     headers: {
       'Content-Type': 'text/plain'
     }
