@@ -287,6 +287,8 @@ async function pushBaidu(event, req, res, params) {
     }
   }).then(res => {
     return res.data;
+  }).catch(err => {
+    return err.response.data
   })
 }
 
