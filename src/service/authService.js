@@ -270,8 +270,8 @@ function getDistanceSpecifiedTime(dateTime, isSolar) {
  * @returns {Promise<void>}
  */
 async function pushBaidu(event, req, res, params) {
-  const url = `http://data.zz.baidu.com/urls?token=${params.token}&site=${params.site}`;
   const data = JSON.parse(params)
+  const url = `http://data.zz.baidu.com/urls?token=${data.token}&site=${data.site}`;
   if (!data.urls) {
     return {
       code: 400,
