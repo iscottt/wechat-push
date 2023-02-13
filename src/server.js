@@ -25,7 +25,7 @@ class ExpressServer {
       const origin = req.get("Origin");
       // 允许的地址 http://127.0.0.1:9000 这样的格式
       if (origin) {
-        res.setHeader("Access-Control-Allow-Origin", origin);
+        res.setHeader("Access-Control-Allow-Origin", "*");
       }
       // 允许跨域请求的方法
       res.setHeader(
