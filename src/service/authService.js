@@ -271,7 +271,8 @@ function getDistanceSpecifiedTime(dateTime, isSolar) {
  */
 async function pushBaidu(event, req, res, params) {
   const url = `http://data.zz.baidu.com/urls?token=${params.token}&site=${params.site}`;
-  if (!JSON.parse(params).urls) {
+  const data = JSON.parse(params)
+  if (!data.urls) {
     return {
       code: 400,
       message: "urls不能为空！"
@@ -280,7 +281,7 @@ async function pushBaidu(event, req, res, params) {
   return axios({
     url,
     method: 'post',
-    data: params.urls.join('\n'),
+    data: data.urls.join('\n'),
     headers: {
       'Content-Type': 'text/plain'
     }
