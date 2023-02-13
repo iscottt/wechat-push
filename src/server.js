@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const MyError = require("./exception");
 const http = require("http");
 const morgan = require("morgan");
+const cors = require('cors')
 
 // 请求大小限制
 const requestLimit = "5120kb";
@@ -14,6 +15,7 @@ class ExpressServer {
     this.contextPath = "/api";
     // 请求日志
     this.app.use(morgan("short"));
+    this.app.use(cors())
     this.app.use(
       bodyParser.urlencoded({ extended: false, limit: requestLimit })
     );
